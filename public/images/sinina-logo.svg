@@ -1,4 +1,5 @@
-<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <path d="M37.5 30H90.5C92.4 30 94 31.5 94.2 33.4L99 94.8C99.2 97.2 97.3 99.2 94.9 99.2H33.1C30.7 99.2 28.8 97.2 29 94.8L33.8 33.4C34 31.5 35.6 30 37.5 30Z" fill="#000000"/>
-  <path d="M50 45V29.5C50 21.2 56.7 14.5 65 14.5C73.3 14.5 80 21.2 80 29.5V45" stroke="#000000" stroke-width="6" stroke-linecap="round"/>
+<svg width="220" height="120" viewBox="0 0 220 120" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Sinina SC logo">
+  <g fill="currentColor">
+    <text x="0" y="95" font-family="Times New Roman, Georgia, serif" font-size="108" font-weight="700" letter-spacing="-3">SC</text>
+  </g>
 </svg>

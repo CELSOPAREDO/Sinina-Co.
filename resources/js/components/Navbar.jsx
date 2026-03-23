@@ -20,11 +20,7 @@ function Navbar() {
             <div className="navbar-container">
                 
                 <Link to="/" className="navbar-brand">
-                    <img
-                        className="brand-logo"
-                        src="/images/sinina-logo.svg"
-                        alt="Sinina logo"
-                    />
+                    <span className="brand-mark" aria-hidden="true">SC</span>
                     <span>Sinina Co.</span>
                 </Link>
 

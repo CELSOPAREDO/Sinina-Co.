@@ -6,11 +6,7 @@ function Footer() {
         <footer className="footer">
             <div className="footer-container">
                 <p className="footer-brand">
-                    <img
-                        className="footer-logo"
-                        src="/images/sinina-logo.svg"
-                        alt="Sinina logo"
-                    />
+                    <span className="footer-mark" aria-hidden="true">SC</span>
                     <span>Sinina Co.</span>
                 </p>
                 <p className="footer-tagline">

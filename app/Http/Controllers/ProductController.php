@@ -47,7 +47,7 @@ class ProductController extends Controller
             'stock'       => 'required|integer|min:0',
             'size'        => 'nullable|string|max:50',
             'color'       => 'nullable|string|max:50',
-            'image'       => 'nullable|image|max:2048',
+            'image'       => 'nullable|image|max:204800',
         ]);
 
         $imagePath = null;
@@ -85,7 +85,7 @@ class ProductController extends Controller
             'stock'       => 'sometimes|integer|min:0',
             'size'        => 'nullable|string|max:50',
             'color'       => 'nullable|string|max:50',
-            'image'       => 'nullable|image|max:2048',
+            'image'       => 'nullable|image|max:204800',
         ]);
 
         if ($request->hasFile('image')) {

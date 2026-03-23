@@ -16,6 +16,7 @@
     display: inline-flex;
     align-items: center;
     gap: 10px;
+    line-height: 1;
     font-family: var(--font-serif);
     font-size: 1.35rem;
     font-weight: 700;
@@ -23,10 +24,15 @@
     margin-bottom: 8px;
 }
 
-.footer-logo {
-    width: 30px;
-    height: 30px;
-    object-fit: contain;
+.footer-brand span {
+    display: block;
+    line-height: 1;
+}
+
+.footer-mark {
+    font: inherit;
+    font-weight: 700;
+    letter-spacing: -0.02em;
 }
 
 .footer-tagline {
