@@ -1,0 +1,133 @@
+<svg width="1200" height="700" viewBox="0 0 1200 700" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Storefront Background -->
+  <rect width="1200" height="700" fill="#C9A876"/>
+  
+  <!-- Corrugated metal wall texture -->
+  <rect x="0" y="0" width="1200" height="700" fill="url(#metalTexture)"/>
+  
+  <!-- Wooden storefront panels -->
+  <rect x="750" y="100" width="420" height="520" rx="8" fill="#654321"/>
+  <rect x="765" y="115" width="120" height="200" fill="#2C3E50" opacity="0.9"/>
+  <rect x="895" y="115" width="100" height="200" fill="#2C3E50" opacity="0.9"/>
+  
+  <!-- Shop window glow -->
+  <rect x="765" y="115" width="230" height="200" fill="#FFD700" opacity="0.08"/>
+  
+  <!-- Storefront door/frame -->
+  <rect x="1030" y="130" width="100" height="280" rx="4" fill="#3E2723" opacity="0.7"/>
+  
+  <!-- Green plants/vines -->
+  <path d="M1100 200Q1110 220 1105 240" stroke="#4CAF50" stroke-width="8" fill="none" opacity="0.8"/>
+  <path d="M1105 240Q1100 260 1110 280" stroke="#5CB85C" stroke-width="6" fill="none" opacity="0.7"/>
+  <circle cx="1108" cy="190" r="6" fill="#7CB342" opacity="0.8"/>
+  <circle cx="1115" cy="210" r="5" fill="#7CB342" opacity="0.7"/>
+  
+  <!-- Ground/Pavement -->
+  <rect y="580" width="1200" height="120" fill="#9E6E5C"/>
+  
+  <!-- Shadow cast -->
+  <rect y="575" width="1200" height="15" fill="#8B5A3C" opacity="0.4"/>
+  
+  <!-- MAIN FIGURE - Man in Beige Jacket -->
+  <!-- Head -->
+  <circle cx="380" cy="200" r="48" fill="#D4A574"/>
+  
+  <!-- Hair - dark, styled -->
+  <path d="M330 170C330 150 340 140 380 140C420 140 430 150 430 170L428 190C428 200 420 210 410 215L350 215C340 210 332 200 332 190Z" fill="#2C1810"/>
+  
+  <!-- Hair shine -->
+  <ellipse cx="360" cy="160" rx="35" ry="20" fill="#3D2817" opacity="0.6"/>
+  
+  <!-- Glasses -->
+  <rect x="345" y="190" width="25" height="18" rx="4" fill="none" stroke="#5A4A3A" stroke-width="2"/>
+  <rect x="385" y="190" width="28" height="18" rx="4" fill="none" stroke="#5A4A3A" stroke-width="2"/>
+  <line x1="370" y1="197" x2="385" y2="197" stroke="#5A4A3A" stroke-width="2"/>
+  <line x1="413" y1="195" x2="425" y2="192" stroke="#5A4A3A" stroke-width="1.5"/>
+  
+  <!-- Face features -->
+  <ellipse cx="360" cy="200" rx="4" ry="6" fill="#A0806A"/>
+  <ellipse cx="400" cy="200" rx="4" ry="6" fill="#A0806A"/>
+  
+  <!-- Neck -->
+  <rect x="370" y="242" width="20" height="18" fill="#D4A574"/>
+  
+  <!-- Dark inner shirt/tee -->
+  <path d="M340 260C340 255 335 252 330 255L305 275C300 280 298 288 302 300L302 420C302 435 312 448 325 450L415 450C428 448 438 435 438 420L438 300C442 288 440 280 435 275L410 255C405 252 400 255 400 260Z" fill="#1a2332"/>
+  
+  <!-- Beige/Tan Jacket - Main Body -->
+  <path d="M325 270C320 265 310 265 305 270L265 295C255 305 250 320 253 335L250 420C250 440 260 455 275 460L340 465L340 270Z" fill="#D4B896" stroke="#A0845F" stroke-width="1.5"/>
+  
+  <!-- Jacket Right Side -->
+  <path d="M435 270C440 265 450 265 455 270L495 295C505 305 510 320 507 335L510 420C510 440 500 455 485 460L420 465L420 270Z" fill="#C9A876" stroke="#A0845F" stroke-width="1.5"/>
+  
+  <!-- Jacket Lapels - detailed -->
+  <path d="M320 285L360 350L340 390" stroke="#A0845F" stroke-width="2.5" fill="none" opacity="0.7"/>
+  <path d="M440 285L400 350L420 390" stroke="#A0845F" stroke-width="2.5" fill="none" opacity="0.7"/>
+  
+  <!-- Jacket texture/sheen -->
+  <ellipse cx="300" cy="330" rx="45" ry="80" fill="#F5E6D3" opacity="0.15"/>
+  
+  <!-- Jacket buttons -->
+  <circle cx="370" cy="310" r="4" fill="#8B6F47" stroke="#6B5A3F" stroke-width="0.5"/>
+  <circle cx="370" cy="360" r="4" fill="#8B6F47" stroke="#6B5A3F" stroke-width="0.5"/>
+  <circle cx="370" cy="410" r="4" fill="#8B6F47" stroke="#6B5A3F" stroke-width="0.5"/>
+  
+  <!-- Left Arm -->
+  <ellipse cx="275" cy="340" rx="28" ry="85" fill="#D4A574" stroke="#A0845F" stroke-width="1" transform="rotate(-20 275 340)"/>
+  
+  <!-- Left Hand in pocket -->
+  <circle cx="250" cy="420" r="22" fill="#D4A574"/>
+  
+  <!-- Right Arm -->
+  <ellipse cx="445" cy="320" rx="28" ry="75" fill="#D4A574" stroke="#A0845F" stroke-width="1" transform="rotate(15 445 320)"/>
+  
+  <!-- Right Hand -->
+  <circle cx="465" cy="390" r="22" fill="#D4A574"/>
+  
+  <!-- Brown Shoulder Bag -->
+  <ellipse cx="480" cy="310" rx="45" ry="60" fill="#3D2817" stroke="#2C1810" stroke-width="1"/>
+  <path d="M455 255L475 220L495 225L480 260Z" fill="#3D2817"/>
+  
+  <!-- Bag strap -->
+  <line x1="460" y1="260" x2="430" y2="190" stroke="#8B6F47" stroke-width="4" opacity="0.9"/>
+  
+  <!-- Bag details/leather texture -->
+  <ellipse cx="480" cy="320" rx="38" ry="50" fill="#4A3728" opacity="0.3"/>
+  
+  <!-- Dark Jeans -->
+  <path d="M345 450L365 450L370 610L340 615Z" fill="#1a2332" stroke="#0F1419" stroke-width="0.5"/>
+  <path d="M395 450L415 450L420 610L390 615Z" fill="#1a2332" stroke="#0F1419" stroke-width="0.5"/>
+  
+  <!-- Jeans texture/seams -->
+  <line x1="355" y1="450" x2="355" y2="610" stroke="#0F1419" stroke-width="0.5" stroke-dasharray="5,7" opacity="0.6"/>
+  <line x1="405" y1="450" x2="405" y2="610" stroke="#0F1419" stroke-width="0.5" stroke-dasharray="5,7" opacity="0.6"/>
+  
+  <!-- Shoes - dark leather -->
+  <ellipse cx="355" cy="620" rx="22" ry="16" fill="#2C1F1A"/>
+  <ellipse cx="405" cy="620" rx="22" ry="16" fill="#2C1F1A"/>
+  
+  <!-- Shoe shine -->
+  <ellipse cx="355" cy="615" rx="18" ry="6" fill="#3D2817" opacity="0.4"/>
+  <ellipse cx="405" cy="615" rx="18" ry="6" fill="#3D2817" opacity="0.4"/>
+  
+  <!-- Text Overlay - SPOTTED ON THE STREET -->
+  <text x="35" y="120" font-family="Arial, sans-serif" font-size="48" font-weight="700" fill="#FFFBF7" letter-spacing="2">SPOTTED ON</text>
+  <text x="35" y="175" font-family="Arial, sans-serif" font-size="48" font-weight="700" fill="#FFFBF7" letter-spacing="2">THE STREET</text>
+  
+  <!-- Subtext -->
+  <text x="35" y="210" font-family="system-ui, sans-serif" font-size="18" fill="#FFFBF7" opacity="0.95">with Winter Set</text>
+  
+  <!-- Product Info Card -->
+  <rect x="30" y="470" width="320" height="180" rx="14" fill="#FFFBF7" stroke="#D4A574" stroke-width="2" opacity="0.98"/>
+  
+  <text x="55" y="515" font-family="Georgia, serif" font-size="32" font-weight="700" fill="#3B1F12">Casual Comfort</text>
+  <text x="55" y="555" font-family="system-ui, sans-serif" font-size="18" fill="#7A5C3D">Beige Jacket Outfit</text>
+  <text x="55" y="585" font-family="system-ui, sans-serif" font-size="16" fill="#A8826D">Urban street style</text>
+  <text x="55" y="615" font-family="system-ui, sans-serif" font-size="15" fill="#C16A2A">★★★★★ Featured Look</text>
+  
+  <defs>
+    <pattern id="metalTexture" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+      <line x1="0" y1="0" x2="0" y2="40" stroke="#B89968" stroke-width="2" opacity="0.1"/>
+    </pattern>
+  </defs>
+</svg>

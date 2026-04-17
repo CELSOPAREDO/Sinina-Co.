@@ -89,7 +89,7 @@ function Products() {
                             disabled={page <= 1}
                             onClick={() => setPage(page - 1)}
                         >
-                            ← Prev
+                            Prev
                         </button>
                         <span>
                             Page {page} of {lastPage}
@@ -98,7 +98,7 @@ function Products() {
                             disabled={page >= lastPage}
                             onClick={() => setPage(page + 1)}
                         >
-                            Next →
+                            Next
                         </button>
                     </div>
                 </>

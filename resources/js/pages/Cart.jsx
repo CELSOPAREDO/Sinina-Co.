@@ -1,18 +1,24 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import API from "../services/api";
 import { getProductImageUrl } from "../services/imageUrl";
 import "./Cart.css";
 
 function Cart() {
+    const navigate = useNavigate();
     const fallbackImage = "https://placehold.co/100x100?text=No+Image";
     const [cart, setCart] = useState(null);
     const [loading, setLoading] = useState(true);
     const [message, setMessage] = useState("");
 
     useEffect(() => {
+        const user = JSON.parse(localStorage.getItem("user"));
+        if (user && user.role === "admin") {
+            navigate("/admin/dashboard");
+            return;
+        }
         fetchCart();
-    }, []);
+    }, [navigate]);
 
     const fetchCart = () => {
         setLoading(true);
@@ -49,7 +55,7 @@ function Cart() {
 
     return (
         <div className="cart-page">
-            <h1>🛒 Your Cart</h1>
+            <h1>Your Cart</h1>
 
             {message && <p className="cart-message">{message}</p>}
 
@@ -105,7 +111,7 @@ function Cart() {
                                     className="cart-item-remove"
                                     onClick={() => removeItem(item.id)}
                                 >
-                                    ✕
+                                    Remove
                                 </button>
                             </div>
                         ))}

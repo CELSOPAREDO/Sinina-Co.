@@ -1,4 +1,5 @@
 
+
 .navbar {
     background-color: var(--navbar);
     color: var(--ink);
@@ -7,6 +8,7 @@
     top: 0;
     z-index: 1000;
     border-bottom: 1px solid var(--border);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .navbar-container {
@@ -51,9 +53,23 @@
     background: none;
     border: none;
     color: var(--ink);
-    font-size: 1.5rem;
     cursor: pointer;
     padding: 4px;
+    width: 40px;
+    height: 40px;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s ease;
+    line-height: 1;
+}
+
+.navbar-toggle:hover {
+    color: var(--rust);
+}
+
+.navbar-toggle svg {
+    width: 24px;
+    height: 24px;
 }
 
 .navbar-links {
@@ -75,27 +91,15 @@
     color: var(--rust);
 }
 
-.navbar-logout-btn {
-    background: var(--rust);
-    color: #fff;
-    border: none;
-    padding: 7px 20px;
-    border-radius: 20px;
-    cursor: pointer;
-    font-size: 0.88rem;
-    font-family: var(--font-sans);
-    font-weight: 500;
-    letter-spacing: 0.02em;
-    transition: background 0.18s;
-}
-
-.navbar-logout-btn:hover {
-    background: var(--rust-dk);
+.navbar-profile-section {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
 }
 
 @media (max-width: 768px) {
     .navbar-toggle {
-        display: block;
+        display: flex;
     }
 
     .navbar-links {
@@ -115,4 +119,26 @@
     .navbar-links.open {
         display: flex;
     }
+}
+
+/* Dark Mode Styles */
+body.dark-mode .navbar {
+    background-color: #1e1e1e;
+    border-bottom-color: #333;
+}
+
+body.dark-mode .navbar-brand,
+body.dark-mode .navbar-links a,
+body.dark-mode .navbar-toggle {
+    color: #f5f5f5;
+}
+
+body.dark-mode .navbar-brand:hover,
+body.dark-mode .navbar-links a:hover {
+    color: #ff9800;
+}
+
+body.dark-mode .navbar-links {
+    background-color: #1e1e1e;
+    border-bottom-color: #333;
 }

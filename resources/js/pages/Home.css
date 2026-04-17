@@ -13,6 +13,29 @@
     overflow: hidden;
 }
 
+.hero-bg {
+    position: absolute;
+    inset: 0;
+}
+
+.hero-bg-layer {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 800ms ease;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.hero-bg-layer.is-active {
+    opacity: 1;
+}
+
+.hero-bg-layer-image {
+    filter: saturate(0.95) brightness(0.66);
+}
+
 .hero::before {
     content: "";
     position: absolute;
@@ -43,6 +66,7 @@
     color: #D9C4B0;
     margin-bottom: 32px;
     line-height: 1.7;
+    min-height: 3.4em;
 }
 
 .hero-btn {
@@ -61,6 +85,36 @@
 .hero-btn:hover {
     background: var(--rust-dk);
     transform: translateY(-1px);
+}
+
+.hero-dots {
+    margin-top: 24px;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+.hero-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 999px;
+    border: 0;
+    background: rgba(255, 255, 255, 0.32);
+    padding: 0;
+    cursor: pointer;
+    transition: background 180ms ease, transform 180ms ease;
+}
+
+.hero-dot.is-active {
+    background: rgba(255, 255, 255, 0.88);
+    transform: scale(1.1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hero-bg-layer,
+    .hero-dot {
+        transition: none;
+    }
 }
 
 .featured-section {

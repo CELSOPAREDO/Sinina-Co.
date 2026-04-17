@@ -5,7 +5,10 @@ import "./ProductCard.css";
 
 function ProductCard({ product }) {
     const fallbackImage = "https://placehold.co/300x400?text=No+Image";
-    const imageUrl = getProductImageUrl(product.image, fallbackImage);
+    
+    // Add cache buster based on product update time
+    const imagePath = product.image ? `${product.image}?t=${new Date(product.updated_at).getTime()}` : null;
+    const imageUrl = getProductImageUrl(imagePath, fallbackImage);
 
     const formattedPrice = Number(product.price).toLocaleString("en-PH", {
         minimumFractionDigits: 0,

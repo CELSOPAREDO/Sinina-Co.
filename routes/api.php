@@ -6,7 +6,6 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ReviewController;
-use App\Http\Controllers\SellerController;
 use App\Http\Controllers\AdminController;
 
 
@@ -22,6 +21,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user',    [AuthController::class, 'user']);
+    Route::put('/user/profile',      [AuthController::class, 'updateProfile']);
+    Route::post('/user/change-password', [AuthController::class, 'changePassword']);
 
     Route::get('/cart',               [CartController::class, 'index']);
     Route::post('/cart/add',          [CartController::class, 'add']);
@@ -34,23 +35,30 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/products/{id}/reviews', [ReviewController::class, 'store']);
 
-    Route::middleware('auth:sanctum')->prefix('seller')->group(function () {
-        Route::get('/products',         [SellerController::class, 'products']);
-        Route::post('/products',        [ProductController::class, 'store']);
-        Route::put('/products/{id}',    [ProductController::class, 'update']);
-        Route::delete('/products/{id}', [ProductController::class, 'destroy']);
-        Route::get('/orders',           [SellerController::class, 'orders']);
-        Route::put('/orders/{id}/status', [OrderController::class, 'updateStatus']);
-        Route::get('/reports',          [SellerController::class, 'reports']);
-    });
-
-    Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
+    Route::middleware('auth:sanctum')->prefix('admin')->middleware('admin')->group(function () {
+        // User management
         Route::get('/users',               [AdminController::class, 'users']);
+        Route::post('/users',              [AdminController::class, 'createUser']);
         Route::put('/users/{id}',          [AdminController::class, 'updateUser']);
         Route::delete('/users/{id}',       [AdminController::class, 'deleteUser']);
+
+        // Category management
         Route::get('/categories',          [AdminController::class, 'categories']);
         Route::post('/categories',         [AdminController::class, 'createCategory']);
+        Route::put('/categories/{id}',     [AdminController::class, 'updateCategory']);
         Route::delete('/categories/{id}',  [AdminController::class, 'deleteCategory']);
+
+        // Product management (formerly seller feature)
+        Route::get('/products',            [AdminController::class, 'products']);
+        Route::post('/products',           [AdminController::class, 'createProduct']);
+        Route::put('/products/{id}',       [AdminController::class, 'updateProduct']);
+        Route::delete('/products/{id}',    [AdminController::class, 'deleteProduct']);
+
+        // Order management (formerly seller feature)
+        Route::get('/orders',              [AdminController::class, 'orders']);
+        Route::put('/orders/{id}/status',  [AdminController::class, 'updateOrderStatus']);
+
+        // Reports
         Route::get('/reports',             [AdminController::class, 'reports']);
     });
 });

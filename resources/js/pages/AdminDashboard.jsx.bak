@@ -1,0 +1,1156 @@
+import React, { useEffect, useState } from "react";
+import API from "../services/api";
+import "./AdminDashboard.css";
+
+function AdminDashboard() {
+    const [users, setUsers] = useState([]);
+    const [categories, setCategories] = useState([]);
+    const [products, setProducts] = useState([]);
+    const [orders, setOrders] = useState([]);
+    const [reports, setReports] = useState(null);
+    const [activeTab, setActiveTab] = useState("users");
+    const [loading, setLoading] = useState(true);
+
+    const [newCategory, setNewCategory] = useState("");
+    const [catMessage, setCatMessage] = useState("");
+
+    // User Management States
+    const [searchQuery, setSearchQuery] = useState("");
+    const [showAddUserModal, setShowAddUserModal] = useState(false);
+    const [newUserForm, setNewUserForm] = useState({
+        name: "",
+        email: "",
+        password: "",
+    });
+    const [addUserMessage, setAddUserMessage] = useState("");
+
+    // Category Management States
+    const [showAddCategoryModal, setShowAddCategoryModal] = useState(false);
+    const [editingCategoryId, setEditingCategoryId] = useState(null);
+    const [categoryForm, setCategoryForm] = useState({ name: "" });
+
+    // Product Management States
+    const [showAddProductModal, setShowAddProductModal] = useState(false);
+    const [editingProductId, setEditingProductId] = useState(null);
+    const [productForm, setProductForm] = useState({
+        category_id: "",
+        name: "",
+        description: "",
+        price: "",
+        stock: "",
+        size: "",
+        color: "",
+    });
+    const [productImageFile, setProductImageFile] = useState(null);
+    const [productImagePreview, setProductImagePreview] = useState(null);
+    const [productMessage, setProductMessage] = useState("");
+
+    // Get current logged-in admin
+    const currentAdmin = JSON.parse(localStorage.getItem("user"));
+
+    useEffect(() => {
+        Promise.all([
+            API.get("/admin/users"),
+            API.get("/admin/categories"),
+            API.get("/admin/products"),
+            API.get("/admin/orders"),
+            API.get("/admin/reports"),
+        ])
+            .then(([usersRes, catRes, prodRes, ordRes, reportRes]) => {
+                setUsers(usersRes.data);
+                setCategories(catRes.data);
+                setProducts(prodRes.data);
+                setOrders(ordRes.data);
+                setReports(reportRes.data);
+                setLoading(false);
+            })
+            .catch(() => setLoading(false));
+    }, []);
+
+    // Filter users based on search query
+    const filteredUsers = users.filter((user) =>
+        user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        user.email.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    const handleDeleteUser = async (userId, userName) => {
+        if (currentAdmin.id === userId) {
+            alert("You cannot delete your own account!");
+            return;
+        }
+
+        if (!window.confirm(`Are you sure you want to delete ${userName}?`))
+            return;
+
+        try {
+            await API.delete(`/admin/users/${userId}`);
+            setUsers(users.filter((u) => u.id !== userId));
+        } catch {
+            alert("Failed to delete user.");
+        }
+    };
+
+    const handleAddUser = async (e) => {
+        e.preventDefault();
+        setAddUserMessage("");
+
+        if (!newUserForm.name || !newUserForm.email || !newUserForm.password) {
+            setAddUserMessage("All fields are required");
+            return;
+        }
+
+        try {
+            const res = await API.post("/admin/users", {
+                name: newUserForm.name,
+                email: newUserForm.email,
+                password: newUserForm.password,
+            });
+            setUsers([...users, res.data.user]);
+            setNewUserForm({ name: "", email: "", password: "" });
+            setShowAddUserModal(false);
+            setAddUserMessage("");
+        } catch (err) {
+            setAddUserMessage(
+                err.response?.data?.message || "Failed to add user"
+            );
+        }
+    };
+
+    const handleCreateCategory = async (e) => {
+        e.preventDefault();
+        setCatMessage("");
+
+        if (!categoryForm.name.trim()) {
+            setCatMessage("Category name is required");
+            return;
+        }
+
+        try {
+            const res = await API.post("/admin/categories", {
+                name: categoryForm.name,
+            });
+
+            if (editingCategoryId) {
+                // Update existing
+                setCategories(
+                    categories.map((c) =>
+                        c.id === editingCategoryId ? res.data.category : c
+                    )
+                );
+                setCatMessage("Category updated successfully!");
+            } else {
+                // Add new
+                setCategories([...categories, res.data.category]);
+                setCatMessage("Category created successfully!");
+            }
+
+            setCategoryForm({ name: "" });
+            setEditingCategoryId(null);
+            setShowAddCategoryModal(false);
+            setTimeout(() => setCatMessage(""), 3000);
+        } catch (err) {
+            setCatMessage(
+                err.response?.data?.message || "Failed to save category"
+            );
+        }
+    };
+
+    const handleEditCategory = (category) => {
+        setEditingCategoryId(category.id);
+        setCategoryForm({ name: category.name });
+        setShowAddCategoryModal(true);
+    };
+
+    const handleUpdateCategory = async (catId) => {
+        setCatMessage("");
+
+        if (!categoryForm.name.trim()) {
+            setCatMessage("Category name is required");
+            return;
+        }
+
+        try {
+            const res = await API.put(`/admin/categories/${catId}`, {
+                name: categoryForm.name,
+            });
+            setCategories(
+                categories.map((c) =>
+                    c.id === catId ? res.data.category : c
+                )
+            );
+            setCategoryForm({ name: "" });
+            setEditingCategoryId(null);
+            setShowAddCategoryModal(false);
+            setCatMessage("Category updated successfully!");
+            setTimeout(() => setCatMessage(""), 3000);
+        } catch (err) {
+            setCatMessage(
+                err.response?.data?.message || "Failed to update category"
+            );
+        }
+    };
+
+    const handleDeleteCategory = async (catId) => {
+        if (!window.confirm("Delete this category?")) return;
+        try {
+            await API.delete(`/admin/categories/${catId}`);
+            setCategories(categories.filter((c) => c.id !== catId));
+        } catch {
+            alert("Failed to delete category.");
+        }
+    };
+
+    const handleDeleteProduct = async (prodId) => {
+        if (!window.confirm("Delete this product?")) return;
+        try {
+            await API.delete(`/admin/products/${prodId}`);
+            setProducts(products.filter((p) => p.id !== prodId));
+        } catch {
+            alert("Failed to delete product.");
+        }
+    };
+
+    const handleAddProduct = async (e) => {
+        e.preventDefault();
+        setProductMessage("");
+
+        if (
+            !productForm.category_id ||
+            !productForm.name ||
+            !productForm.price ||
+            !productForm.stock
+        ) {
+            setProductMessage("Please fill in all required fields");
+            return;
+        }
+
+        try {
+            const formData = new FormData();
+            formData.append("category_id", productForm.category_id);
+            formData.append("name", productForm.name);
+            formData.append("description", productForm.description);
+            formData.append("price", productForm.price);
+            formData.append("stock", productForm.stock);
+            formData.append("size", productForm.size);
+            formData.append("color", productForm.color);
+
+            if (productImageFile) {
+                formData.append("image", productImageFile);
+            }
+
+            if (editingProductId) {
+                // Update existing product
+                formData.append("_method", "PUT");
+                const res = await API.post(`/admin/products/${editingProductId}`, formData, {
+                    headers: { "Content-Type": "multipart/form-data" },
+                });
+
+                const updatedProducts = products.map((p) =>
+                    p.id === editingProductId ? res.data.product : p
+                );
+                setProducts(updatedProducts);
+                setProductMessage("Product updated successfully!");
+            } else {
+                // Create new product
+                const res = await API.post("/admin/products", formData, {
+                    headers: { "Content-Type": "multipart/form-data" },
+                });
+
+                setProducts([...products, res.data.product]);
+                setProductMessage("Product created successfully!");
+            }
+
+            resetProductForm();
+            setShowAddProductModal(false);
+            setTimeout(() => setProductMessage(""), 3000);
+        } catch (err) {
+            setProductMessage(
+                err.response?.data?.message || "Failed to save product"
+            );
+        }
+    };
+
+    const handleEditProduct = (product) => {
+        setEditingProductId(product.id);
+        setProductForm({
+            category_id: product.category_id || "",
+            name: product.name,
+            description: product.description || "",
+            price: product.price,
+            stock: product.stock,
+            size: product.size || "",
+            color: product.color || "",
+        });
+
+        // Set image preview to existing image
+        if (product.image) {
+            setProductImagePreview(
+                product.image.startsWith("http")
+                    ? product.image
+                    : `/storage/${product.image}`
+            );
+        } else {
+            setProductImagePreview(null);
+        }
+
+        setProductImageFile(null);
+        setShowAddProductModal(true);
+    };
+
+    const resetProductForm = () => {
+        setProductForm({
+            category_id: "",
+            name: "",
+            description: "",
+            price: "",
+            stock: "",
+            size: "",
+            color: "",
+        });
+        setProductImageFile(null);
+        setProductImagePreview(null);
+        setEditingProductId(null);
+    };
+
+    const handleProductImageChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            // Validate file type
+            if (!file.type.startsWith("image/")) {
+                setProductMessage("Please select a valid image file");
+                return;
+            }
+
+            // Validate file size (max 200MB)
+            if (file.size > 200 * 1024 * 1024) {
+                setProductMessage("Image size must be less than 200MB");
+                return;
+            }
+
+            setProductImageFile(file);
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                setProductImagePreview(event.target.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const handleUpdateOrderStatus = async (orderId, newStatus) => {
+        try {
+            await API.put(`/admin/orders/${orderId}/status`, { status: newStatus });
+            setOrders(
+                orders.map((o) =>
+                    o.id === orderId ? { ...o, status: newStatus } : o
+                )
+            );
+        } catch {
+            alert("Failed to update order status.");
+        }
+    };
+
+    if (loading) return <p className="loading-text">Loading dashboard...</p>;
+
+    return (
+        <div className="admin-dashboard">
+            <h1>Admin Dashboard</h1>
+
+            
+            <div className="dashboard-tabs">
+                <button
+                    className={activeTab === "users" ? "tab active" : "tab"}
+                    onClick={() => setActiveTab("users")}
+                >
+                    Users
+                </button>
+                <button
+                    className={activeTab === "categories" ? "tab active" : "tab"}
+                    onClick={() => setActiveTab("categories")}
+                >
+                    Categories
+                </button>
+                <button
+                    className={activeTab === "products" ? "tab active" : "tab"}
+                    onClick={() => setActiveTab("products")}
+                >
+                    Products
+                </button>
+                <button
+                    className={activeTab === "orders" ? "tab active" : "tab"}
+                    onClick={() => setActiveTab("orders")}
+                >
+                    Orders
+                </button>
+                <button
+                    className={activeTab === "reports" ? "tab active" : "tab"}
+                    onClick={() => setActiveTab("reports")}
+                >
+                    Reports
+                </button>
+            </div>
+
+            
+            {activeTab === "users" && (
+                <div className="tab-content">
+                    <div className="users-header">
+                        <h2>All Users ({filteredUsers.length})</h2>
+                        <button
+                            className="new-user-btn"
+                            onClick={() => setShowAddUserModal(true)}
+                        >
+                            + New User
+                        </button>
+                    </div>
+
+                    <div className="search-container">
+                        <input
+                            type="text"
+                            className="search-input"
+                            placeholder="Search by name or email..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                        />
+                    </div>
+
+                    {filteredUsers.length === 0 ? (
+                        <div className="empty-state">
+                            <p>No users found</p>
+                            {searchQuery && (
+                                <small>Try adjusting your search terms</small>
+                            )}
+                        </div>
+                    ) : (
+                        <table className="data-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {filteredUsers.map((user) => (
+                                    <tr key={user.id}>
+                                        <td>{user.id}</td>
+                                        <td>{user.name}</td>
+                                        <td>{user.email}</td>
+                                        <td>
+                                            <span className="status-badge active">
+                                                Active
+                                            </span>
+                                        </td>
+                                        <td className="actions-cell">
+                                            <button
+                                                className="edit-btn"
+                                                title="Edit user"
+                                            >
+                                                Edit
+                                            </button>
+                                            <button
+                                                className={`delete-btn ${
+                                                    currentAdmin.id === user.id
+                                                        ? "disabled"
+                                                        : ""
+                                                }`}
+                                                onClick={() =>
+                                                    handleDeleteUser(
+                                                        user.id,
+                                                        user.name
+                                                    )
+                                                }
+                                                disabled={
+                                                    currentAdmin.id === user.id
+                                                }
+                                                title={
+                                                    currentAdmin.id === user.id
+                                                        ? "Cannot delete your own account"
+                                                        : "Delete user"
+                                                }
+                                            >
+                                                Delete
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    )}
+                </div>
+            )}
+
+            {showAddUserModal && (
+                <div className="modal-overlay" onClick={() => setShowAddUserModal(false)}>
+                    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h3>Add New User</h3>
+                            <button
+                                className="modal-close"
+                                onClick={() => setShowAddUserModal(false)}
+                            >
+                                ×
+                            </button>
+                        </div>
+
+                        <form onSubmit={handleAddUser} className="user-form">
+                            <div className="form-group">
+                                <label htmlFor="name">Name *</label>
+                                <input
+                                    id="name"
+                                    type="text"
+                                    placeholder="Full name"
+                                    value={newUserForm.name}
+                                    onChange={(e) =>
+                                        setNewUserForm({
+                                            ...newUserForm,
+                                            name: e.target.value,
+                                        })
+                                    }
+                                    required
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <label htmlFor="email">Email *</label>
+                                <input
+                                    id="email"
+                                    type="email"
+                                    placeholder="user@example.com"
+                                    value={newUserForm.email}
+                                    onChange={(e) =>
+                                        setNewUserForm({
+                                            ...newUserForm,
+                                            email: e.target.value,
+                                        })
+                                    }
+                                    required
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <label htmlFor="password">Password *</label>
+                                <input
+                                    id="password"
+                                    type="password"
+                                    placeholder="Temporary password"
+                                    value={newUserForm.password}
+                                    onChange={(e) =>
+                                        setNewUserForm({
+                                            ...newUserForm,
+                                            password: e.target.value,
+                                        })
+                                    }
+                                    required
+                                />
+                            </div>
+
+                            {addUserMessage && (
+                                <p
+                                    className={
+                                        addUserMessage.includes("Failed") ||
+                                        addUserMessage.includes("required")
+                                            ? "error-message"
+                                            : "success-message"
+                                    }
+                                >
+                                    {addUserMessage}
+                                </p>
+                            )}
+
+                            <div className="modal-actions">
+                                <button
+                                    type="button"
+                                    className="cancel-btn"
+                                    onClick={() => setShowAddUserModal(false)}
+                                >
+                                    Cancel
+                                </button>
+                                <button type="submit" className="submit-btn">
+                                    Add User
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+
+            
+            {activeTab === "categories" && (
+                <div className="tab-content">
+                    <div className="users-header">
+                        <h2>Categories ({categories.length})</h2>
+                        <button
+                            className="new-user-btn"
+                            onClick={() => {
+                                setEditingCategoryId(null);
+                                setCategoryForm({ name: "" });
+                                setShowAddCategoryModal(true);
+                            }}
+                        >
+                            + Add Category
+                        </button>
+                    </div>
+
+                    {catMessage && <p className="cat-message">{catMessage}</p>}
+
+                    {categories.length === 0 ? (
+                        <div className="empty-state">
+                            <p>No categories found</p>
+                        </div>
+                    ) : (
+                        <table className="data-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {categories.map((cat) => (
+                                    <tr key={cat.id}>
+                                        <td>{cat.id}</td>
+                                        <td>{cat.name}</td>
+                                        <td className="actions-cell">
+                                            <button
+                                                className="edit-btn"
+                                                onClick={() =>
+                                                    handleEditCategory(cat)
+                                                }
+                                            >
+                                                Edit
+                                            </button>
+                                            <button
+                                                className="delete-btn"
+                                                onClick={() =>
+                                                    handleDeleteCategory(cat.id)
+                                                }
+                                            >
+                                                Delete
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    )}
+                </div>
+            )}
+
+            {showAddCategoryModal && (
+                <div
+                    className="modal-overlay"
+                    onClick={() => setShowAddCategoryModal(false)}
+                >
+                    <div
+                        className="modal-content"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <div className="modal-header">
+                            <h3>
+                                {editingCategoryId
+                                    ? "Edit Category"
+                                    : "Add New Category"}
+                            </h3>
+                            <button
+                                className="modal-close"
+                                onClick={() => setShowAddCategoryModal(false)}
+                            >
+                                ×
+                            </button>
+                        </div>
+
+                        <form onSubmit={handleCreateCategory} className="user-form">
+                            <div className="form-group">
+                                <label htmlFor="cat-name">Category Name *</label>
+                                <input
+                                    id="cat-name"
+                                    type="text"
+                                    placeholder="e.g., T-Shirts, Dresses"
+                                    value={categoryForm.name}
+                                    onChange={(e) =>
+                                        setCategoryForm({
+                                            name: e.target.value,
+                                        })
+                                    }
+                                    required
+                                />
+                            </div>
+
+                            <div className="modal-actions">
+                                <button
+                                    type="button"
+                                    className="cancel-btn"
+                                    onClick={() => setShowAddCategoryModal(false)}
+                                >
+                                    Cancel
+                                </button>
+                                <button type="submit" className="submit-btn">
+                                    {editingCategoryId
+                                        ? "Update Category"
+                                        : "Add Category"}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+
+            
+            {activeTab === "products" && (
+                <div className="tab-content">
+                    <div className="users-header">
+                        <h2>Products ({products.length})</h2>
+                        <button
+                            className="new-user-btn"
+                            onClick={() => {
+                                setEditingProductId(null);
+                                setProductForm({
+                                    category_id: "",
+                                    name: "",
+                                    description: "",
+                                    price: "",
+                                    stock: "",
+                                    size: "",
+                                    color: "",
+                                });
+                                setShowAddProductModal(true);
+                            }}
+                        >
+                            + Add Product
+                        </button>
+                    </div>
+
+                    {productMessage && (
+                        <p
+                            className={
+                                productMessage.includes("successfully")
+                                    ? "success-message"
+                                    : "error-message"
+                            }
+                        >
+                            {productMessage}
+                        </p>
+                    )}
+
+                    {products.length === 0 ? (
+                        <div className="empty-state">
+                            <p>No products found</p>
+                        </div>
+                    ) : (
+                        <div className="admin-products-grid">
+                            {products.map((product) => (
+                                <div key={product.id} className="admin-product-card">
+                                    <div className="product-card-img-container">
+                                        {/* Image Preview / Display */}
+                                        {product.image ? (
+                                            <img
+                                                src={product.image.startsWith("http") ? product.image : `/storage/${product.image}`}
+                                                alt={product.name}
+                                                className="product-card-img"
+                                            />
+                                        ) : (
+                                            <div className="product-card-no-img">No Image</div>
+                                        )}
+                                        {/* Low Stock Badge Option */}
+                                        {product.stock < 5 && (
+                                            <span className="low-stock-badge">Low Stock</span>
+                                        )}
+                                    </div>
+                                    
+                                    <div className="product-card-info">
+                                        <h3 className="product-card-title">{product.name}</h3>
+                                        <p className="product-card-category">{product.category?.name || "N/A"}</p>
+                                        <div className="product-card-meta">
+                                            <span className="product-card-price">₱{Number(product.price).toFixed(2)}</span>
+                                            <span className="product-card-stock">Stock: {product.stock}</span>
+                                        </div>
+                                    </div>
+
+                                    <div className="product-card-actions">
+                                        <button
+                                            className="edit-btn block-btn"
+                                            title="Edit product"
+                                            onClick={() => handleEditProduct(product)}
+                                        >
+                                            Edit
+                                        </button>
+                                        <button
+                                            className="delete-btn block-btn"
+                                            onClick={() => handleDeleteProduct(product.id)}
+                                        >
+                                            Delete
+                                        </button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            )}
+
+            {showAddProductModal && (
+                <div
+                    className="modal-overlay"
+                    onClick={() => setShowAddProductModal(false)}
+                >
+                    <div
+                        className="modal-content"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <div className="modal-header">
+                            <h3>
+                                {editingProductId
+                                    ? "Edit Product"
+                                    : "Add New Product"}
+                            </h3>
+                            <button
+                                className="modal-close"
+                                onClick={() => {
+                                    setShowAddProductModal(false);
+                                    resetProductForm();
+                                }}
+                            >
+                                ×
+                            </button>
+                        </div>
+
+                        <form onSubmit={handleAddProduct} className="user-form">
+                            <div className="form-group">
+                                <label htmlFor="product-category">
+                                    Category *
+                                </label>
+                                <select
+                                    id="product-category"
+                                    value={productForm.category_id}
+                                    onChange={(e) =>
+                                        setProductForm({
+                                            ...productForm,
+                                            category_id: e.target.value,
+                                        })
+                                    }
+                                    required
+                                >
+                                    <option value="">
+                                        Select a category
+                                    </option>
+                                    {categories.map((cat) => (
+                                        <option key={cat.id} value={cat.id}>
+                                            {cat.name}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            <div className="form-group">
+                                <label htmlFor="product-name">
+                                    Product Name *
+                                </label>
+                                <input
+                                    id="product-name"
+                                    type="text"
+                                    placeholder="Product name"
+                                    value={productForm.name}
+                                    onChange={(e) =>
+                                        setProductForm({
+                                            ...productForm,
+                                            name: e.target.value,
+                                        })
+                                    }
+                                    required
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <label htmlFor="product-description">
+                                    Description
+                                </label>
+                                <textarea
+                                    id="product-description"
+                                    placeholder="Product description"
+                                    value={productForm.description}
+                                    onChange={(e) =>
+                                        setProductForm({
+                                            ...productForm,
+                                            description: e.target.value,
+                                        })
+                                    }
+                                    rows="3"
+                                />
+                            </div>
+
+                            <div className="form-row">
+                                <div className="form-group">
+                                    <label htmlFor="product-price">
+                                        Price *
+                                    </label>
+                                    <input
+                                        id="product-price"
+                                        type="number"
+                                        placeholder="0.00"
+                                        step="0.01"
+                                        min="0"
+                                        value={productForm.price}
+                                        onWheel={(e) => e.target.blur()}
+                                        onChange={(e) =>
+                                            setProductForm({
+                                                ...productForm,
+                                                price: e.target.value,
+                                            })
+                                        }
+                                        required
+                                    />
+                                </div>
+
+                                <div className="form-group">
+                                    <label htmlFor="product-stock">
+                                        Stock *
+                                    </label>
+                                    <input
+                                        id="product-stock"
+                                        type="number"
+                                        placeholder="0"
+                                        min="0"
+                                        value={productForm.stock}
+                                        onWheel={(e) => e.target.blur()}
+                                        onChange={(e) =>
+                                            setProductForm({
+                                                ...productForm,
+                                                stock: e.target.value,
+                                            })
+                                        }
+                                        required
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="form-group">
+                                <label htmlFor="product-image">
+                                    Product Image
+                                </label>
+                                <input
+                                    id="product-image"
+                                    type="file"
+                                    accept="image/jpg,image/jpeg,image/png"
+                                    onChange={handleProductImageChange}
+                                />
+                                <small style={{ color: "#999", marginTop: "4px" }}>
+                                    Supported: JPG, JPEG, PNG (Max 200MB)
+                                </small>
+                            </div>
+
+                            {productImagePreview && (
+                                <div className="image-preview-container">
+                                    <label>Image Preview</label>
+                                    <img
+                                        src={productImagePreview}
+                                        alt="Product preview"
+                                        className="image-preview"
+                                    />
+                                </div>
+                            )}
+
+                            {!productImagePreview && !editingProductId && (
+                                <div className="image-placeholder">
+                                    <p>No image selected</p>
+                                </div>
+                            )}
+
+                            <div className="form-row">
+                                <div className="form-group">
+                                    <label htmlFor="product-size">Size</label>
+                                    <select
+                                        id="product-size"
+                                        value={productForm.size}
+                                        onChange={(e) =>
+                                            setProductForm({
+                                                ...productForm,
+                                                size: e.target.value,
+                                            })
+                                        }
+                                    >
+                                        <option value="">Select a size</option>
+                                        <option value="XS">XS</option>
+                                        <option value="S">S</option>
+                                        <option value="M">M</option>
+                                        <option value="L">L</option>
+                                        <option value="XL">XL</option>
+                                        <option value="XXL">XXL</option>
+                                    </select>
+                                </div>
+
+                                <div className="form-group">
+                                    <label htmlFor="product-color">
+                                        Color
+                                    </label>
+                                    <select
+                                        id="product-color"
+                                        value={productForm.color}
+                                        onChange={(e) =>
+                                            setProductForm({
+                                                ...productForm,
+                                                color: e.target.value,
+                                            })
+                                        }
+                                    >
+                                        <option value="">Select a color</option>
+                                        <option value="Red">Red</option>
+                                        <option value="Blue">Blue</option>
+                                        <option value="Green">Green</option>
+                                        <option value="Black">Black</option>
+                                        <option value="White">White</option>
+                                        <option value="Yellow">Yellow</option>
+                                        <option value="Orange">Orange</option>
+                                        <option value="Purple">Purple</option>
+                                        <option value="Navy">Navy</option>
+                                        <option value="Grey">Grey</option>
+                                        <option value="Pink">Pink</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            {productMessage && (
+                                <p
+                                    className={
+                                        productMessage.includes("Failed") ||
+                                        productMessage.includes("required")
+                                            ? "error-message"
+                                            : "success-message"
+                                    }
+                                >
+                                    {productMessage}
+                                </p>
+                            )}
+
+                            <div className="modal-actions">
+                                <button
+                                    type="button"
+                                    className="cancel-btn"
+                                    onClick={() => {
+                                        setShowAddProductModal(false);
+                                        resetProductForm();
+                                    }}
+                                >
+                                    Cancel
+                                </button>
+                                <button type="submit" className="submit-btn">
+                                    {editingProductId
+                                        ? "Update Product"
+                                        : "Add Product"}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+
+            
+            {activeTab === "orders" && (
+                <div className="tab-content">
+                    <h2>Orders ({orders.length})</h2>
+                    <table className="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>User</th>
+                                <th>Total</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {orders.map((order) => (
+                                <tr key={order.id}>
+                                    <td>{order.id}</td>
+                                    <td>{order.user?.name || "N/A"}</td>
+                                    <td>₱{Number(order.total_price).toFixed(2)}</td>
+                                    <td>
+                                        <select
+                                            value={order.status}
+                                            onChange={(e) =>
+                                                handleUpdateOrderStatus(
+                                                    order.id,
+                                                    e.target.value
+                                                )
+                                            }
+                                        >
+                                            <option value="pending">Pending</option>
+                                            <option value="processing">Processing</option>
+                                            <option value="shipped">Shipped</option>
+                                            <option value="delivered">Delivered</option>
+                                            <option value="cancelled">Cancelled</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <a href={`/admin/orders/${order.id}`} className="view-btn">View</a>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            )}
+
+            
+            {activeTab === "reports" && reports && (
+                <div className="tab-content">
+                    <h2>System Reports</h2>
+                    <div className="report-cards">
+                        <div className="report-card">
+                            <h3>{reports.total_users}</h3>
+                            <p>Total Users</p>
+                        </div>
+                        <div className="report-card">
+                            <h3>{reports.total_products}</h3>
+                            <p>Total Products</p>
+                        </div>
+                        <div className="report-card">
+                            <h3>{reports.total_orders}</h3>
+                            <p>Total Orders</p>
+                        </div>
+                        <div className="report-card">
+                            <h3>₱{Number(reports.total_revenue).toFixed(2)}</h3>
+                            <p>Total Revenue</p>
+                        </div>
+                    </div>
+
+                    <div className="report-details">
+                        <div className="report-section">
+                            <h3>Users by Role</h3>
+                            <ul>
+                                <li>Admins: {reports.users_by_role.admin}</li>
+                                <li>Users: {reports.users_by_role.user}</li>
+                            </ul>
+                        </div>
+                        <div className="report-section">
+                            <h3>Orders by Status</h3>
+                            <ul>
+                                <li>
+                                    Pending: {reports.orders_by_status.pending}
+                                </li>
+                                <li>
+                                    Processing:{" "}
+                                    {reports.orders_by_status.processing}
+                                </li>
+                                <li>
+                                    Shipped: {reports.orders_by_status.shipped}
+                                </li>
+                                <li>
+                                    Delivered:{" "}
+                                    {reports.orders_by_status.delivered}
+                                </li>
+                                <li>
+                                    Cancelled:{" "}
+                                    {reports.orders_by_status.cancelled}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+}
+
+export default AdminDashboard;

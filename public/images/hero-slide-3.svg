@@ -1,0 +1,48 @@
+<svg width="1200" height="700" viewBox="0 0 1200 700" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1200" height="700" fill="#F5EFE7"/>
+  <rect x="100" y="60" width="1000" height="580" rx="20" fill="#FDFAF5" stroke="#E8DCC8" stroke-width="2"/>
+  
+  <!-- Accent circle -->
+  <circle cx="850" cy="500" r="130" fill="#E8B4A8" opacity="0.1"/>
+  
+  <!-- Product: Wide-leg Pants -->
+  <!-- Hanger -->
+  <path d="M520 120L480 160" stroke="#8B6F47" stroke-width="6" stroke-linecap="round"/>
+  <path d="M520 120L560 160" stroke="#8B6F47" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="520" cy="115" r="8" fill="#8B6F47"/>
+  
+  <!-- Waistband -->
+  <ellipse cx="520" cy="160" rx="50" ry="12" fill="#8B6F47" stroke="#6B5A3F" stroke-width="1"/>
+  
+  <!-- Left pant leg -->
+  <path d="M475 160L420 170L410 430C410 445 420 450 430 450L500 445V160" fill="#E8C9B8" stroke="#D4A574" stroke-width="1.5"/>
+  
+  <!-- Right pant leg -->
+  <path d="M565 160L620 170L630 430C630 445 620 450 610 450L540 445V160" fill="#E8C9B8" stroke="#D4A574" stroke-width="1.5"/>
+  
+  <!-- Center seam -->
+  <line x1="520" y1="160" x2="520" y2="445" stroke="#D4A574" stroke-width="1" stroke-dasharray="4,6"/>
+  
+  <!-- Crease lines -->
+  <line x1="450" y1="160" x2="440" y2="445" stroke="#E0D4C0" stroke-width="0.5" stroke-dasharray="6,4"/>
+  <line x1="590" y1="160" x2="600" y2="445" stroke="#E0D4C0" stroke-width="0.5" stroke-dasharray="6,4"/>
+  
+  <!-- Hem detail -->
+  <path d="M420 445C430 450 475 452 520 452C565 452 610 450 620 445" fill="none" stroke="#D4A574" stroke-width="1"/>
+  
+  <!-- Shadow -->
+  <ellipse cx="520" cy="470" rx="130" ry="22" fill="#00000008"/>
+  
+  <!-- Product card -->
+  <rect x="700" y="180" width="280" height="160" rx="12" fill="#F8F6F3" stroke="#D4A574" stroke-width="2"/>
+  <text x="840" y="225" text-anchor="middle" font-family="Georgia, serif" font-size="32" font-weight="700" fill="#3B1F12">Wide-Leg Pants</text>
+  <text x="840" y="260" text-anchor="middle" font-family="system-ui, sans-serif" font-size="18" fill="#7A5C3D">Comfort meets style</text>
+  <text x="840" y="285" text-anchor="middle" font-family="system-ui, sans-serif" font-size="18" fill="#7A5C3D">Versatile & flattering</text>
+  <text x="840" y="310" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" fill="#A8826D">Sustainable fabric</text>
+  
+  <!-- New badge -->
+  <circle cx="950" cy="520" r="40" fill="#C16A2A"/>
+  <text x="950" y="515" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="700" fill="#FFFBF7">NEW</text>
+  <text x="950" y="535" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#FFFBF7">Arrival</text>
+</svg>

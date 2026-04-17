@@ -12,24 +12,17 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         User::create([
-            'name'     => 'Admin',
-            'email'    => 'admin@sininaco.com',
+            'name'     => 'Celso Paredo',
+            'email'    => 'admin@gmail.com',
             'password' => Hash::make('password'),
             'role'     => 'admin',
         ]);
 
         User::create([
-            'name'     => 'Seller',
-            'email'    => 'seller@sininaco.com',
+            'name'     => 'Test User',
+            'email'    => 'user@sininaco.com',
             'password' => Hash::make('password'),
-            'role'     => 'seller',
-        ]);
-
-        User::create([
-            'name'     => 'Buyer',
-            'email'    => 'buyer@sininaco.com',
-            'password' => Hash::make('password'),
-            'role'     => 'buyer',
+            'role'     => 'user',
         ]);
 
         $categories = ['T-Shirts', 'Pants', 'Dresses', 'Jackets', 'Accessories', 'Footwear'];

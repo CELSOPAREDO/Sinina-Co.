@@ -12,6 +12,11 @@ class OrderController extends Controller
     public function checkout(Request $request)
     {
         $user = $request->user();
+
+        if ($user->role === 'admin') {
+            return response()->json(['message' => 'Admins cannot place orders'], 403);
+        }
+
         $cart = Cart::where('user_id', $user->id)->first();
 
         if (!$cart || $cart->items()->count() === 0) {
@@ -54,6 +59,10 @@ class OrderController extends Controller
 
     public function index(Request $request)
     {
+        if ($request->user()->role === 'admin') {
+            return response()->json(['message' => 'Use admin/orders endpoint'], 403);
+        }
+
         $orders = Order::where('user_id', $request->user()->id)
             ->with('items.product')
             ->latest()
@@ -64,6 +73,10 @@ class OrderController extends Controller
 
     public function show(Request $request, $id)
     {
+        if ($request->user()->role === 'admin') {
+            return response()->json(['message' => 'Use admin/orders endpoint'], 403);
+        }
+
         $order = Order::where('user_id', $request->user()->id)
             ->with('items.product')
             ->findOrFail($id);

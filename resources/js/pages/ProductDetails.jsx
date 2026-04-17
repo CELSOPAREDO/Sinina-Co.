@@ -15,6 +15,8 @@ function ProductDetails() {
     const [comment, setComment] = useState("");
 
     const isLoggedIn = !!localStorage.getItem("token");
+    const user = isLoggedIn ? JSON.parse(localStorage.getItem("user")) : null;
+    const isAdmin = user && user.role === "admin";
 
     useEffect(() => {
         API.get(`/products/${id}`)
@@ -51,7 +53,9 @@ function ProductDetails() {
     if (!product) return <p className="empty-text">Product not found.</p>;
 
     const fallbackImage = "https://placehold.co/500x500?text=No+Image";
-    const imageUrl = getProductImageUrl(product.image, fallbackImage);
+    // Add cache buster based on product update time
+    const imagePath = product.image ? `${product.image}?t=${new Date(product.updated_at).getTime()}` : null;
+    const imageUrl = getProductImageUrl(imagePath, fallbackImage);
 
     return (
         <div className="product-details">
@@ -87,17 +91,20 @@ function ProductDetails() {
                     <p className="product-details-desc">
                         {product.description || "No description available."}
                     </p>
-                    <p className="product-details-seller">
-                        Sold by: {product.seller ? product.seller.name : "Unknown"}
-                    </p>
 
-                    <button
-                        className="add-to-cart-btn"
-                        onClick={handleAddToCart}
-                        disabled={product.stock <= 0}
-                    >
-                        🛒 Add to Cart
-                    </button>
+                    {!isAdmin && (
+                        <button
+                            className="add-to-cart-btn"
+                            onClick={handleAddToCart}
+                            disabled={product.stock <= 0}
+                        >
+                            Add to Cart
+                        </button>
+                    )}
+
+                    {isAdmin && (
+                        <p className="admin-notice">Admins cannot purchase products</p>
+                    )}
 
                     {message && <p className="details-message">{message}</p>}
                 </div>
@@ -118,7 +125,7 @@ function ProductDetails() {
                             >
                                 {[5, 4, 3, 2, 1].map((r) => (
                                     <option key={r} value={r}>
-                                        {"★".repeat(r)}{"☆".repeat(5 - r)} ({r})
+                                        {r} Stars
                                     </option>
                                 ))}
                             </select>
@@ -143,8 +150,7 @@ function ProductDetails() {
                                 <div className="review-header">
                                     <strong>{review.user ? review.user.name : "User"}</strong>
                                     <span className="review-stars">
-                                        {"★".repeat(review.rating)}
-                                        {"☆".repeat(5 - review.rating)}
+                                        {review.rating}/5 Stars
                                     </span>
                                 </div>
                                 <p>{review.comment}</p>

@@ -9,7 +9,6 @@ function Register() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [passwordConfirmation, setPasswordConfirmation] = useState("");
-    const [role, setRole] = useState("buyer");
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
 
@@ -24,7 +23,6 @@ function Register() {
                 email,
                 password,
                 password_confirmation: passwordConfirmation,
-                role,
             });
             localStorage.setItem("token", res.data.token);
             localStorage.setItem("user", JSON.stringify(res.data.user));
@@ -97,18 +95,6 @@ function Register() {
                             required
                             placeholder="Repeat your password"
                         />
-                    </div>
-
-                    <div className="form-group">
-                        <label htmlFor="role">Register as</label>
-                        <select
-                            id="role"
-                            value={role}
-                            onChange={(e) => setRole(e.target.value)}
-                        >
-                            <option value="buyer">Buyer</option>
-                            <option value="seller">Seller</option>
-                        </select>
                     </div>
 
                     <button type="submit" className="register-btn" disabled={loading}>

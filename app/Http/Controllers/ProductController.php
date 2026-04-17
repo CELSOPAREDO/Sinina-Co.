@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Models\Category;
+use App\Helpers\ImageProcessor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -52,7 +53,19 @@ class ProductController extends Controller
 
         $imagePath = null;
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('products', 'public');
+            try {
+                $imagePath = $request->file('image')->store('products', 'public');
+                // Process image: resize to square 600x600
+                ImageProcessor::processProductImage($imagePath, 600);
+            } catch (\Exception $e) {
+                if ($imagePath) {
+                    Storage::disk('public')->delete($imagePath);
+                }
+                return response()->json([
+                    'message' => 'Failed to process image',
+                    'error' => $e->getMessage()
+                ], 400);
+            }
         }
 
         $product = Product::create([
@@ -89,10 +102,23 @@ class ProductController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            if ($product->image) {
-                Storage::disk('public')->delete($product->image);
+            try {
+                // Delete old image
+                if ($product->image) {
+                    ImageProcessor::deleteImage($product->image);
+                }
+                
+                // Store new image
+                $imagePath = $request->file('image')->store('products', 'public');
+                // Process image: resize to square 600x600
+                ImageProcessor::processProductImage($imagePath, 600);
+                $validated['image'] = $imagePath;
+            } catch (\Exception $e) {
+                return response()->json([
+                    'message' => 'Failed to process image',
+                    'error' => $e->getMessage()
+                ], 400);
             }
-            $validated['image'] = $request->file('image')->store('products', 'public');
         }
 
         $product->update($validated);
@@ -108,7 +134,7 @@ class ProductController extends Controller
         $product = Product::where('seller_id', $request->user()->id)->findOrFail($id);
 
         if ($product->image) {
-            Storage::disk('public')->delete($product->image);
+            ImageProcessor::deleteImage($product->image);
         }
 
         $product->delete();

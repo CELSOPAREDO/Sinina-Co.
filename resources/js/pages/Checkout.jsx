@@ -11,13 +11,18 @@ function Checkout() {
     const [error, setError] = useState("");
 
     useEffect(() => {
+        const user = JSON.parse(localStorage.getItem("user"));
+        if (user && user.role === "admin") {
+            navigate("/admin/dashboard");
+            return;
+        }
         API.get("/cart")
             .then((res) => {
                 setCart(res.data);
                 setLoading(false);
             })
             .catch(() => setLoading(false));
-    }, []);
+    }, [navigate]);
 
     const totalPrice =
         cart && cart.items
@@ -63,7 +68,7 @@ function Checkout() {
                 {cart.items.map((item) => (
                     <div key={item.id} className="checkout-item">
                         <span className="checkout-item-name">
-                            {item.product.name} × {item.quantity}
+                            {item.product.name} (Qty: {item.quantity})
                         </span>
                         <span className="checkout-item-price">
                             ₱{(item.product.price * item.quantity).toFixed(2)}

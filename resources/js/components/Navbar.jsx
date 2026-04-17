@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import ProfileDropdown from "./ProfileDropdown";
 import "./Navbar.css";
 
 function Navbar() {
@@ -8,12 +9,6 @@ function Navbar() {
 
     const user = JSON.parse(localStorage.getItem("user"));
     const isLoggedIn = !!localStorage.getItem("token");
-
-    const handleLogout = () => {
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
-        navigate("/login");
-    };
 
     return (
         <nav className="navbar">
@@ -28,8 +23,9 @@ function Navbar() {
                 <button
                     className="navbar-toggle"
                     onClick={() => setMenuOpen(!menuOpen)}
+                    title="Toggle Menu"
                 >
-                    ☰
+                    Menu
                 </button>
 
                 
@@ -41,38 +37,26 @@ function Navbar() {
                         Products
                     </Link>
 
+                    {isLoggedIn && user && user.role === "admin" && (
+                        <Link
+                            to="/admin/dashboard"
+                            onClick={() => setMenuOpen(false)}
+                        >
+                            Admin Dashboard
+                        </Link>
+                    )}
+
                     {isLoggedIn ? (
                         <>
-                            <Link to="/cart" onClick={() => setMenuOpen(false)}>
-                                Cart
-                            </Link>
-                            <Link to="/profile" onClick={() => setMenuOpen(false)}>
-                                Profile
-                            </Link>
-
-                            
-                            {user && user.role === "seller" && (
-                                <Link
-                                    to="/seller/dashboard"
-                                    onClick={() => setMenuOpen(false)}
-                                >
-                                    Seller Dashboard
+                            {user && user.role === "user" && (
+                                <Link to="/cart" onClick={() => setMenuOpen(false)}>
+                                    Cart
                                 </Link>
                             )}
 
-                            
-                            {user && user.role === "admin" && (
-                                <Link
-                                    to="/admin/dashboard"
-                                    onClick={() => setMenuOpen(false)}
-                                >
-                                    Admin Dashboard
-                                </Link>
-                            )}
-
-                            <button className="navbar-logout-btn" onClick={handleLogout}>
-                                Logout
-                            </button>
+                            <div className="navbar-profile-section">
+                                <ProfileDropdown />
+                            </div>
                         </>
                     ) : (
                         <>
