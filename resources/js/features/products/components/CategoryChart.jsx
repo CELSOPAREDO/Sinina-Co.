@@ -8,7 +8,7 @@ const CategoryChart = ({ data }) => {
         <div className="w-full">
             <h3 className="text-xl font-bold text-gray-900 font-serif mb-6">Sales by Category</h3>
             <div className="h-[250px] w-full" style={{ minWidth: 0 }}>
-                <ResponsiveContainer width="100%" height="100%" minHeight={250}>
+                <ResponsiveContainer width="100%" height="100%" aspect={1.5} minHeight={250}>
                     <BarChart data={data} margin={{ top: 0, right: 10, left: -20, bottom: 0 }} layout="vertical">
                         <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#f3f4f6" />
                         <XAxis type="number" hide />

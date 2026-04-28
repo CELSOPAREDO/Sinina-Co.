@@ -37,28 +37,30 @@ class DatabaseSeeder extends Seeder
             $categoryMap[$name] = $cat->id;
         }
 
-        // Add sample products
+        // Add sample products with Unsplash placeholders
         $products = [
             // T-Shirts
             [
                 'name' => 'Classic White T-Shirt',
-                'description' => 'Comfortable and versatile white t-shirt perfect for everyday wear. Made from premium cotton blend.',
+                'description' => 'Comfortable and versatile white t-shirt perfect for everyday wear.',
                 'price' => 399.99,
                 'stock' => 50,
                 'category_id' => $categoryMap['T-Shirts'],
                 'seller_id' => $admin->id,
                 'color' => 'White',
-                'size' => 'M'
+                'size' => 'M',
+                'image' => 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?q=80&w=800&auto=format&fit=crop'
             ],
             [
                 'name' => 'Charcoal Grey Premium Tee',
-                'description' => 'Sleek and modern grey t-shirt with breathable fabric. Ideal for casual outings.',
+                'description' => 'Sleek and modern grey t-shirt with breathable fabric.',
                 'price' => 449.99,
                 'stock' => 35,
                 'category_id' => $categoryMap['T-Shirts'],
                 'seller_id' => $admin->id,
                 'color' => 'Grey',
-                'size' => 'M'
+                'size' => 'M',
+                'image' => 'https://images.unsplash.com/photo-1581655353564-df123a1eb820?q=80&w=800&auto=format&fit=crop'
             ],
             [
                 'name' => 'Navy Blue Crew Neck',
@@ -68,49 +70,43 @@ class DatabaseSeeder extends Seeder
                 'category_id' => $categoryMap['T-Shirts'],
                 'seller_id' => $admin->id,
                 'color' => 'Navy',
-                'size' => 'L'
+                'size' => 'L',
+                'image' => 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?q=80&w=800&auto=format&fit=crop'
             ],
             // Pants
             [
                 'name' => 'Black Slim Fit Jeans',
-                'description' => 'Modern slim fit jeans in classic black. Perfect for both casual and semi-formal occasions.',
+                'description' => 'Modern slim fit jeans in classic black.',
                 'price' => 1299.99,
                 'stock' => 25,
                 'category_id' => $categoryMap['Pants'],
                 'seller_id' => $admin->id,
                 'color' => 'Black',
-                'size' => '32'
+                'size' => '32',
+                'image' => 'https://images.unsplash.com/photo-1542272604-787c3835535d?q=80&w=800&auto=format&fit=crop'
             ],
             [
                 'name' => 'Blue Straight Leg Chinos',
-                'description' => 'Comfortable straight leg chinos in versatile blue. Great for a polished casual look.',
+                'description' => 'Comfortable straight leg chinos in versatile blue.',
                 'price' => 1199.99,
                 'stock' => 30,
                 'category_id' => $categoryMap['Pants'],
                 'seller_id' => $admin->id,
                 'color' => 'Blue',
-                'size' => '34'
-            ],
-            [
-                'name' => 'Khaki Premium Trousers',
-                'description' => 'Sophisticated khaki trousers made from premium fabric. Perfect for office wear.',
-                'price' => 1399.99,
-                'stock' => 20,
-                'category_id' => $categoryMap['Pants'],
-                'seller_id' => $admin->id,
-                'color' => 'Khaki',
-                'size' => '32'
+                'size' => '34',
+                'image' => 'https://images.unsplash.com/photo-1473966968600-fa801b869a1a?q=80&w=800&auto=format&fit=crop'
             ],
             // Jackets
             [
                 'name' => 'Denim Jacket Classic',
-                'description' => 'Timeless denim jacket that goes with almost everything. A wardrobe essential.',
+                'description' => 'Timeless denim jacket that goes with almost everything.',
                 'price' => 1699.99,
                 'stock' => 18,
                 'category_id' => $categoryMap['Jackets'],
                 'seller_id' => $admin->id,
                 'color' => 'Blue',
-                'size' => 'M'
+                'size' => 'M',
+                'image' => 'https://images.unsplash.com/photo-1551537482-f2075a1d41f2?q=80&w=800&auto=format&fit=crop'
             ],
             [
                 'name' => 'Leather Bomber Jacket',
@@ -120,7 +116,8 @@ class DatabaseSeeder extends Seeder
                 'category_id' => $categoryMap['Jackets'],
                 'seller_id' => $admin->id,
                 'color' => 'Black',
-                'size' => 'L'
+                'size' => 'L',
+                'image' => 'https://images.unsplash.com/photo-1521223890158-f9f7c3d5d504?q=80&w=800&auto=format&fit=crop'
             ],
             // Accessories
             [
@@ -131,17 +128,8 @@ class DatabaseSeeder extends Seeder
                 'category_id' => $categoryMap['Accessories'],
                 'seller_id' => $admin->id,
                 'color' => 'Brown',
-                'size' => 'One Size'
-            ],
-            [
-                'name' => 'Cotton Canvas Tote Bag',
-                'description' => 'Spacious and durable canvas tote bag perfect for daily use.',
-                'price' => 799.99,
-                'stock' => 35,
-                'category_id' => $categoryMap['Accessories'],
-                'seller_id' => $admin->id,
-                'color' => 'Beige',
-                'size' => 'One Size'
+                'size' => 'One Size',
+                'image' => 'https://images.unsplash.com/photo-1524380365678-51aa3d440b4d?q=80&w=800&auto=format&fit=crop'
             ],
         ];
 

@@ -32,7 +32,12 @@ export default function UserShop() {
 
             const prodData = prodRes.data.data || prodRes.data;
             setProducts(Array.isArray(prodData) ? prodData : []);
-            setCategories(Array.isArray(catRes.data) ? catRes.data : []);
+            
+            const catData = Array.isArray(catRes.data) ? catRes.data : [];
+            const filteredCats = catData.filter(c => 
+                !['dresses', 'footwear'].includes(c.name.toLowerCase())
+            );
+            setCategories(filteredCats);
         } catch (err) {
             console.error("Error loading shop data:", err);
         } finally {

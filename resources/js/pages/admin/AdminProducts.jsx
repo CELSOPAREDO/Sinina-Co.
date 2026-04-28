@@ -31,11 +31,19 @@ export default function AdminProducts() {
     useEffect(() => { loadData(); }, []);
 
     const loadData = () => {
-        const params = new URLSearchParams();
-        if (searchTerm) params.append('search', searchTerm);
-        if (filterCategory) params.append('category_id', filterCategory);
-        API.get(`/admin/products?${params.toString()}`).then(res => setProducts(res.data.data || res.data || [])).catch(console.error);
-        API.get("/admin/categories").then(res => setCategories(res.data || [])).catch(console.error);
+        API.get("/admin/products", { params: { search: searchTerm, category_id: filterCategory } })
+            .then(res => setProducts(res.data || []))
+            .catch(console.error);
+        
+        API.get("/admin/categories")
+            .then(res => {
+                // Remove Dresses and Footwear from the UI
+                const filtered = (res.data || []).filter(c => 
+                    !['dresses', 'footwear'].includes(c.name.toLowerCase())
+                );
+                setCategories(filtered);
+            })
+            .catch(console.error);
     };
 
     const getImageUrl = (path) => {
