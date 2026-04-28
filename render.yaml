@@ -2,9 +2,7 @@ services:
   # The Web Service for Laravel
   - type: web
     name: sinina-co-web
-    env: php
-    buildCommand: composer install --no-dev && npm install && npm run build
-    startCommand: php artisan migrate --force && apache2-foreground
+    env: docker
     envVars:
       - key: APP_KEY
         generateValue: true
@@ -13,7 +11,7 @@ services:
       - key: APP_DEBUG
         value: false
       - key: APP_URL
-        fromContext: git.url
+        sync: false
       - key: DB_CONNECTION
         value: pgsql
       - key: DB_HOST
