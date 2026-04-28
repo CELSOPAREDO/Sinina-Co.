@@ -7,9 +7,9 @@ Route::get('/admin/dashboard', function () {
     return view('app');
 });
 
-// Redirect root to admin dashboard
+// Main landing page entry point
 Route::get('/', function () {
-    return redirect('/admin/dashboard');
+    return view('app');
 });
 
 // Catch-all for SPA routing

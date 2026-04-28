@@ -24,7 +24,7 @@ function Login() {
             if (res.data.user.role === "admin") {
                 navigate("/admin/dashboard");
             } else {
-                navigate("/user/dashboard");
+                navigate("/");
             }
         } catch (err) {
             setError(
