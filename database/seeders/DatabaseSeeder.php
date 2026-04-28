@@ -12,24 +12,28 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        $admin = User::create([
-            'name'     => 'Celso Paredo',
-            'email'    => 'admin@gmail.com',
-            'password' => Hash::make('password'),
-            'role'     => 'admin',
-        ]);
+        $admin = User::firstOrCreate(
+            ['email' => 'admin@gmail.com'],
+            [
+                'name'     => 'Celso Paredo',
+                'password' => Hash::make('password'),
+                'role'     => 'admin',
+            ]
+        );
 
-        User::create([
-            'name'     => 'Test User',
-            'email'    => 'user@sininaco.com',
-            'password' => Hash::make('password'),
-            'role'     => 'user',
-        ]);
+        User::firstOrCreate(
+            ['email' => 'user@sininaco.com'],
+            [
+                'name'     => 'Test User',
+                'password' => Hash::make('password'),
+                'role'     => 'user',
+            ]
+        );
 
         $categories = ['T-Shirts', 'Pants', 'Dresses', 'Jackets', 'Accessories', 'Footwear'];
         $categoryMap = [];
         foreach ($categories as $name) {
-            $cat = Category::create(['name' => $name]);
+            $cat = Category::firstOrCreate(['name' => $name]);
             $categoryMap[$name] = $cat->id;
         }
 
@@ -184,7 +188,10 @@ class DatabaseSeeder extends Seeder
         ];
 
         foreach ($products as $product) {
-            Product::create($product);
+            Product::firstOrCreate(
+                ['name' => $product['name']],
+                $product
+            );
         }
     }
 }
