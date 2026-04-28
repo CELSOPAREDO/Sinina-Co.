@@ -11,8 +11,8 @@ const SalesChart = ({ data }) => {
                     <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">Revenue</span>
                 </div>
             </div>
-            <div className="h-[300px] w-full">
-                <ResponsiveContainer width="100%" height="100%">
+            <div className="h-[300px] w-full" style={{ minWidth: 0 }}>
+                <ResponsiveContainer width="100%" height="100%" minHeight={300}>
                     <AreaChart data={data} margin={{ top: 10, right: 0, left: -20, bottom: 0 }}>
                         <defs>
                             <linearGradient id="colorSales" x1="0" y1="0" x2="0" y2="1">

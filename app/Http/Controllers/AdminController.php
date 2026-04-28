@@ -364,20 +364,4 @@ class AdminController extends Controller
             ],
         ]);
     }
-
-    public function repairStorageLink()
-    {
-        try {
-            \Illuminate\Support\Facades\Artisan::call('storage:link', ['--force' => true]);
-            return response()->json([
-                'message' => 'Storage link repaired successfully.',
-                'output' => \Illuminate\Support\Facades\Artisan::output()
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Failed to repair storage link.',
-                'error' => $e->getMessage()
-            ], 500);
-        }
-    }
 }

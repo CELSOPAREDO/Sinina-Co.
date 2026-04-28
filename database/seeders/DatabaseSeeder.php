@@ -30,7 +30,7 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        $categories = ['T-Shirts', 'Pants', 'Dresses', 'Jackets', 'Accessories', 'Footwear'];
+        $categories = ['T-Shirts', 'Pants', 'Jackets', 'Accessories'];
         $categoryMap = [];
         foreach ($categories as $name) {
             $cat = Category::firstOrCreate(['name' => $name]);
@@ -101,27 +101,6 @@ class DatabaseSeeder extends Seeder
                 'color' => 'Khaki',
                 'size' => '32'
             ],
-            // Dresses
-            [
-                'name' => 'Little Black Dress',
-                'description' => 'Timeless and elegant black dress suitable for various occasions.',
-                'price' => 2499.99,
-                'stock' => 15,
-                'category_id' => $categoryMap['Dresses'],
-                'seller_id' => $admin->id,
-                'color' => 'Black',
-                'size' => 'S'
-            ],
-            [
-                'name' => 'Floral Summer Dress',
-                'description' => 'Light and breezy floral dress perfect for summer celebrations.',
-                'price' => 1899.99,
-                'stock' => 22,
-                'category_id' => $categoryMap['Dresses'],
-                'seller_id' => $admin->id,
-                'color' => 'Floral',
-                'size' => 'M'
-            ],
             // Jackets
             [
                 'name' => 'Denim Jacket Classic',
@@ -163,27 +142,6 @@ class DatabaseSeeder extends Seeder
                 'seller_id' => $admin->id,
                 'color' => 'Beige',
                 'size' => 'One Size'
-            ],
-            // Footwear
-            [
-                'name' => 'White Sneakers Classic',
-                'description' => 'Comfortable white sneakers with cushioned sole. Perfect everyday shoes.',
-                'price' => 2199.99,
-                'stock' => 28,
-                'category_id' => $categoryMap['Footwear'],
-                'seller_id' => $admin->id,
-                'color' => 'White',
-                'size' => '42'
-            ],
-            [
-                'name' => 'Brown Leather Oxford',
-                'description' => 'Classic brown leather oxford shoes for formal occasions.',
-                'price' => 3499.99,
-                'stock' => 12,
-                'category_id' => $categoryMap['Footwear'],
-                'seller_id' => $admin->id,
-                'color' => 'Brown',
-                'size' => '42'
             ],
         ];
 
