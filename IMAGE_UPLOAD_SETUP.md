@@ -229,3 +229,18 @@ If you encounter issues:
 3. **Check storage permissions**: `storage/app/public/products/`
 4. **Clear browser cache** for CSS/JS updates
 
+---
+
+## Railway Deployment Notes
+
+### 1. Storage Symlink
+For images to be visible in production, the `public/storage` symlink must exist. The `composer.json` has been updated to automatically run this during the `setup` script.
+
+### 2. Environment Variables
+Ensure `APP_URL` is set to your actual Railway domain (e.g., `https://sinina-co.up.railway.app`) in the Railway dashboard.
+
+### 3. Persistent Storage
+Railway uses an ephemeral filesystem. If you upload images through the admin dashboard, they will be lost when the app redeploys unless you attach a **Railway Volume** to the `/storage/app/public` directory.
+
+### 4. Chrome "Intervention"
+If you see the message "[Intervention] Images loaded lazily...", it means the browser is deferring image loads. We have removed `loading="lazy"` from critical product thumbnails to prevent this.

@@ -5,6 +5,7 @@ import "./UserShop.css";
 import { Search, Filter, ShoppingBag, Loader2 } from "lucide-react";
 import AddToCartModal from "../../features/orders/components/AddToCartModal";
 import SystemModal from "../../components/ui/SystemModal";
+import { getProductImageUrl } from "../../services/imageUrl";
 
 export default function UserShop() {
     const [products, setProducts] = useState([]);
@@ -129,7 +130,20 @@ export default function UserShop() {
                                 <Link to={`/user/shop/product/${product.id}`} key={product.id} className="us-card">
                                     <div className="us-img-wrap">
                                         {product.image ? (
-                                            <img src={`/storage/${product.image}`} alt={product.name} loading="lazy" />
+                                            <>
+                                                <img 
+                                                    src={getProductImageUrl(product.image)} 
+                                                    alt={product.name} 
+                                                    decoding="async"
+                                                    onError={(e) => {
+                                                        e.currentTarget.style.display = 'none';
+                                                        if (e.currentTarget.nextSibling) {
+                                                            e.currentTarget.nextSibling.style.display = 'flex';
+                                                        }
+                                                    }}
+                                                />
+                                                <div className="us-no-img" style={{ display: 'none' }}>No Image</div>
+                                            </>
                                         ) : (
                                             <div className="us-no-img">No Image</div>
                                         )}

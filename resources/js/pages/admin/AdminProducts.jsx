@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import API from "../../services/api";
 import SystemModal from "../../components/ui/SystemModal";
 import Toast from "../../components/ui/Toast";
-import { Edit2, Trash2, PackagePlus, X, Loader2, UploadCloud, Package } from "lucide-react";
+import { Edit2, Trash2, PackagePlus, X, Loader2, UploadCloud, Package, RefreshCw } from "lucide-react";
 
 const SIZES = ["XS", "S", "M", "L", "XL", "2XL", "4XL"];
 
@@ -27,6 +27,7 @@ export default function AdminProducts() {
     const [confirmModal, setConfirmModal] = useState({ show: false, id: null });
     const [alertModal, setAlertModal] = useState({ show: false, message: "", title: "" });
     const [toast, setToast] = useState({ show: false, message: "" });
+    const [isRepairing, setIsRepairing] = useState(false);
 
     useEffect(() => { loadData(); }, []);
 
@@ -38,14 +39,22 @@ export default function AdminProducts() {
         API.get("/admin/categories").then(res => setCategories(res.data || [])).catch(console.error);
     };
 
-    useEffect(() => {
-        const id = setTimeout(loadData, 300);
-        return () => clearTimeout(id);
-    }, [searchTerm, filterCategory]);
+    const handleRepairStorage = async () => {
+        setIsRepairing(true);
+        try {
+            const res = await API.post("/admin/repair-storage");
+            setToast({ show: true, message: res.data.message || "Storage link repaired!" });
+            loadData();
+        } catch (err) {
+            setAlertModal({ show: true, title: "Repair Failed", message: err.response?.data?.message || "Failed to repair storage link." });
+        } finally {
+            setIsRepairing(false);
+        }
+    };
 
     const getImageUrl = (path) => {
         if (!path) return null;
-        if (path.startsWith('http')) return path;
+        if (path.startsWith('http') || path.startsWith('data:')) return path;
         const cleanPath = path.replace(/^\/?storage\//, '');
         return `/storage/${cleanPath}`;
     };
@@ -197,9 +206,20 @@ export default function AdminProducts() {
                         </div>
                     </div>
                 </div>
-                <button className="btn-primary" onClick={openAddModal} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <PackagePlus size={18} /> Add Product
-                </button>
+                <div className="header-actions" style={{ display: 'flex', gap: '12px' }}>
+                    <button 
+                        className="btn-secondary" 
+                        onClick={handleRepairStorage} 
+                        disabled={isRepairing}
+                        title="Fix broken images by repairing storage link"
+                    >
+                        {isRepairing ? <Loader2 className="animate-spin" size={18} /> : <RefreshCw size={18} />}
+                        Repair Images
+                    </button>
+                    <button className="btn-primary" onClick={openAddModal} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <PackagePlus size={18} /> Add Product
+                    </button>
+                </div>
             </header>
 
             {/* ── Product Grid ── */}
@@ -218,9 +238,22 @@ export default function AdminProducts() {
                             {/* Image */}
                             <div className="ap-card-img">
                                 {p.image
-                                    ? <img src={getImageUrl(p.image)} alt={p.name} loading="lazy" />
-                                    : <div className="ap-no-img"><Package size={36} strokeWidth={1} /></div>
+                                    ? <img 
+                                        src={getImageUrl(p.image)} 
+                                        alt={p.name} 
+                                        decoding="async"
+                                        onError={(e) => {
+                                            e.currentTarget.onerror = null;
+                                            e.currentTarget.src = ""; // Clear src to trigger alt or custom UI
+                                            e.currentTarget.style.display = 'none';
+                                            e.currentTarget.nextSibling.style.display = 'flex';
+                                        }}
+                                      />
+                                    : null
                                 }
+                                <div className="ap-no-img" style={{ display: p.image ? 'none' : 'flex' }}>
+                                    <Package size={36} strokeWidth={1} />
+                                </div>
                                 {isLow && <span className="ap-low-badge">Low Stock</span>}
                             </div>
 

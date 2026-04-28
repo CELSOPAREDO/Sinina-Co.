@@ -5,6 +5,7 @@ import "./UserDashboard.css";
 import { ArrowRight, ShoppingCart, ShoppingBag, Star, TrendingUp, Package, Loader2 } from "lucide-react";
 import AddToCartModal from "../../features/orders/components/AddToCartModal";
 import SystemModal from "../../components/ui/SystemModal";
+import { getProductImageUrl } from "../../services/imageUrl";
 
 export default function UserDashboard() {
     const [user, setUser] = useState(null);
@@ -97,7 +98,21 @@ export default function UserDashboard() {
                             <Link to={`/user/shop/product/${product.id}`} key={product.id} className="ud-product-card">
                                 <div className="ud-product-img-wrap">
                                     {product.image ? (
-                                        <img src={`/storage/${product.image}`} alt={product.name} loading="lazy" className="ud-product-img" />
+                                        <>
+                                            <img 
+                                                src={getProductImageUrl(product.image)} 
+                                                alt={product.name} 
+                                                decoding="async" 
+                                                className="ud-product-img"
+                                                onError={(e) => {
+                                                    e.currentTarget.style.display = 'none';
+                                                    if (e.currentTarget.nextSibling) {
+                                                        e.currentTarget.nextSibling.style.display = 'flex';
+                                                    }
+                                                }}
+                                            />
+                                            <div className="ud-no-image" style={{ display: 'none' }}>No Image</div>
+                                        </>
                                     ) : (
                                         <div className="ud-no-image">No Image</div>
                                     )}

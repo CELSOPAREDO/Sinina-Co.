@@ -88,5 +88,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/dashboard/recent-orders', [DashboardController::class, 'getRecentOrders']);
         Route::get('/dashboard/top-selling', [DashboardController::class, 'getTopSelling']);
         Route::get('/dashboard/low-stock',   [DashboardController::class, 'getLowStock']);
+        Route::post('/repair-storage',       [AdminController::class, 'repairStorageLink']);
     });
 });
