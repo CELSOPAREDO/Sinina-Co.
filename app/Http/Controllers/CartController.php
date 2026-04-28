@@ -30,6 +30,7 @@ class CartController extends Controller
         $request->validate([
             'product_id' => 'required|exists:products,id',
             'quantity'   => 'sometimes|integer|min:1',
+            'size'       => 'nullable|string',
         ]);
 
         $cart = Cart::firstOrCreate(['user_id' => $request->user()->id]);
@@ -37,6 +38,7 @@ class CartController extends Controller
 
         $cartItem = CartItem::where('cart_id', $cart->id)
             ->where('product_id', $request->product_id)
+            ->where('size', $request->size)
             ->first();
 
         if ($cartItem) {
@@ -47,6 +49,7 @@ class CartController extends Controller
                 'cart_id'    => $cart->id,
                 'product_id' => $request->product_id,
                 'quantity'   => $quantity,
+                'size'       => $request->size,
             ]);
         }
 

@@ -15,12 +15,15 @@ class AuthController extends Controller
         $validated = $request->validate([
             'name'     => 'required|string|max:255',
             'email'    => 'required|string|email|max:255|unique:users',
+            'phone'    => 'required|string|max:20',
             'password' => 'required|string|min:6|confirmed',
         ]);
 
         $user = User::create([
             'name'     => $validated['name'],
             'email'    => $validated['email'],
+            'phone'    => $validated['phone'],
+            'address'  => $request->address,
             'password' => Hash::make($validated['password']),
             'role'     => 'user',
         ]);
@@ -41,13 +44,21 @@ class AuthController extends Controller
             'password' => 'required|string',
         ]);
 
-        if (!Auth::attempt($request->only('email', 'password'))) {
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user || !Hash::check($request->password, $user->password)) {
             throw ValidationException::withMessages([
                 'email' => ['The provided credentials are incorrect.'],
             ]);
         }
 
-        $user  = Auth::user();
+        if ($user->status === 'suspended') {
+            throw ValidationException::withMessages([
+                'email' => ['Your account has been suspended. Please contact support.'],
+            ]);
+        }
+
+
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
@@ -72,12 +83,28 @@ class AuthController extends Controller
     public function updateProfile(Request $request)
     {
         $validated = $request->validate([
-            'name'  => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $request->user()->id,
+            'name'          => 'required|string|max:255',
+            'email'         => 'required|string|email|max:255|unique:users,email,' . $request->user()->id,
+            'phone'         => 'nullable|string|max:20',
+            'profile_image' => 'nullable|image|mimes:jpg,jpeg,png|max:10240',
         ]);
 
         $user = $request->user();
-        $user->update($validated);
+        
+        if ($request->hasFile('profile_image')) {
+            // Delete old image if exists
+            if ($user->profile_image) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($user->profile_image);
+            }
+            $path = $request->file('profile_image')->store('profiles', 'public');
+            $user->profile_image = $path;
+        }
+
+        $user->name = $validated['name'];
+        $user->email = $validated['email'];
+        $user->phone = $validated['phone'] ?? $user->phone;
+        $user->address = $request->address ?? $user->address;
+        $user->save();
 
         return response()->json([
             'message' => 'Profile updated successfully',
@@ -106,6 +133,17 @@ class AuthController extends Controller
 
         return response()->json([
             'message' => 'Password changed successfully',
+        ]);
+    }
+
+    public function deleteAccount(Request $request)
+    {
+        $user = $request->user();
+        $user->currentAccessToken()->delete();
+        $user->delete();
+
+        return response()->json([
+            'message' => 'Account deleted successfully',
         ]);
     }
 }

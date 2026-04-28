@@ -1,0 +1,170 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap');
+
+:root {
+    /* Primary Colors - Refined Palette */
+    --bg: #FDFCFB;
+    --surface: #FFFFFF;
+    --ink: #1A1A1A;
+    --ink-light: #4A4A4A;
+    --muted: #8E8E93;
+    --accent: #B84C2E;
+    --accent-hover: #9A3D22;
+    --accent-soft: #FDECEC;
+    --border: #E5E5E7;
+    --border-light: #F2F2F7;
+    
+    /* Functional Colors */
+    --success: #34C759;
+    --warning: #FFCC00;
+    --error: #FF3B30;
+    
+    /* Shadows - Layered and soft */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.08);
+    
+    /* Typography */
+    --font-heading: 'Poppins', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    
+    /* Backward Compatibility */
+    --font-serif: var(--font-heading);
+    --font-sans: var(--font-body);
+    
+    /* Spacing */
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 16px;
+    --radius-full: 9999px;
+}
+
+[data-theme="dark"] {
+    --bg: #09090b; /* Zinc-950 */
+    --surface: #18181b; /* Zinc-900 */
+    --surface-elevated: #27272a; /* Zinc-800 */
+    --ink: #fafafa; /* Zinc-50 */
+    --ink-light: #d4d4d8; /* Zinc-300 */
+    --muted: #a1a1aa; /* Zinc-400 */
+    --border: #27272a; /* Zinc-800 */
+    --border-light: #3f3f46; /* Zinc-700 */
+    
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.5);
+    --shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.6);
+}
+
+
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-body);
+    background-color: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 0.5em;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.2s ease;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    background: none;
+    font-family: inherit;
+    transition: all 0.2s ease;
+}
+
+/* Global Container */
+.app-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Glassmorphism Utility */
+.glass {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+[data-theme="dark"] .glass {
+    background: rgba(24, 24, 27, 0.8);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+    animation: fadeIn 0.4s ease-out forwards;
+}
+
+/* Reusable Components */
+.btn-primary {
+    background: var(--ink);
+    color: var(--surface);
+    padding: 12px 24px;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+}
+
+.btn-primary:hover {
+    background: var(--ink-light);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-secondary {
+    background: var(--surface);
+    color: var(--ink);
+    border: 1px solid var(--border);
+    padding: 12px 24px;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.btn-secondary:hover {
+    background: var(--border-light);
+}
+
+.card {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    padding: 24px;
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: var(--shadow-md);
+}

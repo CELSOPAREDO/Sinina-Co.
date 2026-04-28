@@ -1,0 +1,57 @@
+.toast-bubble-container {
+    position: fixed;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 4000;
+    pointer-events: none;
+}
+
+.toast-bubble {
+    background: var(--ink);
+    color: var(--surface);
+    padding: 12px 24px;
+    border-radius: 50px; /* Bubble/pill shape */
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    animation: toastSlideDown 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    min-width: 250px;
+}
+
+.toast-bubble.success {
+    background: #000; /* Pure black for high-end look */
+}
+
+.toast-icon {
+    background: var(--surface);
+    color: var(--ink);
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 900;
+}
+
+.toast-message {
+    margin: 0;
+    font-weight: 700;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+@keyframes toastSlideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

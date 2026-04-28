@@ -1,0 +1,93 @@
+.system-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 3000;
+    animation: fadeIn 0.3s ease;
+}
+
+.system-modal-bubble {
+    background: var(--surface);
+    padding: 2.5rem;
+    border-radius: 40px; /* High rounding for bubble effect */
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    animation: bubbleUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 1px solid var(--border-light);
+}
+
+.system-modal-title {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: var(--ink);
+}
+
+.system-modal-message {
+    font-size: 1.1rem;
+    color: var(--muted);
+    line-height: 1.5;
+    margin-bottom: 2rem;
+}
+
+.system-modal-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.btn-system-primary, .btn-system-secondary {
+    padding: 12px 32px;
+    border-radius: 50px; /* Pill buttons for bubble theme */
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.75rem;
+    transition: all 0.2s ease;
+}
+
+.btn-system-primary {
+    background: var(--ink);
+    color: var(--surface);
+}
+
+.btn-system-secondary {
+    background: var(--bg);
+    color: var(--muted);
+    border: 1px solid var(--border);
+}
+
+.btn-system-primary:hover {
+    transform: scale(1.05);
+    background: #000;
+}
+
+.btn-system-secondary:hover {
+    background: var(--border-light);
+    color: var(--ink);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes bubbleUp {
+    from { 
+        opacity: 0; 
+        transform: scale(0.8) translateY(40px);
+    }
+    to { 
+        opacity: 1; 
+        transform: scale(1) translateY(0);
+    }
+}

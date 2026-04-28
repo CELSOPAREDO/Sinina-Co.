@@ -19,6 +19,11 @@ class Product extends Model
         'size',
         'color',
         'image',
+        'size_inventory',
+    ];
+
+    protected $casts = [
+        'size_inventory' => 'array',
     ];
 
     public function seller()

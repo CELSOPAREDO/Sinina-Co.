@@ -1,0 +1,104 @@
+.navbar {
+    background-color: var(--surface);
+    height: 100px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.navbar-container {
+    width: 90%;
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.brand-mark {
+    width: 32px;
+    height: 32px;
+    background: var(--ink);
+    color: var(--surface);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 0.75rem;
+    border-radius: 4px;
+}
+
+.navbar-brand span:last-child {
+    font-family: var(--font-heading);
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: -0.03em;
+}
+
+.navbar-links {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+}
+
+.navbar-links a {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    transition: color 0.3s;
+}
+
+.navbar-links a:hover {
+    color: var(--ink);
+}
+
+.navbar-toggle {
+    display: none;
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    color: var(--ink);
+}
+
+.navbar-profile-section {
+    margin-left: 20px;
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        height: 80px;
+    }
+
+    .navbar-toggle {
+        display: block;
+    }
+
+    .navbar-links {
+        display: none;
+        position: absolute;
+        top: 80px;
+        left: 0;
+        right: 0;
+        background: var(--surface);
+        padding: 2rem;
+        flex-direction: column;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .navbar-links.open {
+        display: flex;
+    }
+}

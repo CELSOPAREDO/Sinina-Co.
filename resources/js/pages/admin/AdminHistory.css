@@ -1,0 +1,53 @@
+.ao-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.ao-tabs {
+    display: flex;
+    gap: 0.75rem;
+    background: var(--bg);
+    padding: 6px;
+    border-radius: 100px;
+    border: 1px solid var(--bg);
+}
+
+.ao-tab {
+    background: none;
+    border: none;
+    padding: 10px 24px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: var(--muted);
+    cursor: pointer;
+    border-radius: 100px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ao-tab:hover {
+    color: var(--ink);
+    background: rgba(15, 23, 42, 0.05);
+}
+
+.ao-tab.active {
+    background: var(--ink);
+    color: var(--surface);
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2);
+}
+
+.ao-search {
+    max-width: 400px;
+}
+
+@media (max-width: 768px) {
+    .ao-toolbar {
+        flex-direction: column;
+    }
+}
